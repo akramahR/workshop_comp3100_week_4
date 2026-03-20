@@ -32,7 +32,7 @@ def load_last_checkpoint(process_id):
     return state
 
 
-def worker_process(process_id, lock):
+def worker_process(process_id):
     """ Simulate a worker process with multiple checkpoints. """
     try:
         # Load the last checkpoint for this process
@@ -47,11 +47,11 @@ def worker_process(process_id, lock):
 
             # Periodically save progress as an incremental checkpoint
             if task_count % 3 == 0:  # Save checkpoint every 3 iterations
-                with lock:
-                    state["task_count"] = task_count
-                    checkpoint_number = task_count // 3
-                    save_checkpoint(process_id, state, checkpoint_number)
-                    # checkpoint_number += 1  # Increment checkpoint number
+                #with lock:
+                state["task_count"] = task_count
+                checkpoint_number = task_count // 3
+                save_checkpoint(process_id, state, checkpoint_number)
+                # checkpoint_number += 1  # Increment checkpoint number
 
             # Simulate random failure (20% chance)
             if random.random() < 0.2:
@@ -62,16 +62,16 @@ def worker_process(process_id, lock):
     except Exception as e:
         print(f"Process {process_id} failure: {e}")
         # Simulate restart after crash by reloading last checkpoint
-        worker_process(process_id, lock)
+        worker_process(process_id)
 
 
 def main():
     processes = []
-    lock = Lock()  # To synchronise access to the checkpoint files
+    #lock = Lock()  # To synchronise access to the checkpoint files
 
     # Create worker processes
     for process_id in range(1, 4):
-        p = Process(target=worker_process, args=(process_id, lock))
+        p = Process(target=worker_process, args=(process_id,))
         processes.append(p)
         p.start()
 
