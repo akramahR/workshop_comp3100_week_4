@@ -1,16 +1,34 @@
-# This is a sample Python script.
+import multiprocessing
+import time
+import random
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+def worker(name):
+    for i in range(10):
+        print(f"Hello from {name}. count: {i}")
+        #time.sleep(0.2)
+        time.sleep(random.uniform(0, 1))
 
+def worker2():
+    for i in range(10):
+        p = multiprocessing.current_process()
+        print(f"Process Name: {p.name}, PID: {p.pid}. count: {i}")
+        #time.sleep(0.2)
+        time.sleep(random.uniform(0, 1))
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+if __name__ == "__main__":
+    process = multiprocessing.Process(target=worker, args=("Process 1",))
+    process2 = multiprocessing.Process(target=worker, args=("Process 2",))
+    process3 = multiprocessing.Process(target=worker2)
 
+    #process.daemon = True
+    #process2.daemon = False
+    #process3.daemon = True
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+    process.start()
+    process2.start()
+    process3.start()
+    process.join()
+    process2.join()
+    process3.join()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    print("some more code")

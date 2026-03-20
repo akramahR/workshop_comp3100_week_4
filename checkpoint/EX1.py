@@ -21,6 +21,7 @@ def load_checkpoint():
         print("No checkpoint found. Starting fresh.")
         return {"task_count": 0}
 
+
 # Simulate a process performing a task
 state = load_checkpoint()
 for i in range(state["task_count"], 10):
@@ -31,3 +32,5 @@ for i in range(state["task_count"], 10):
     state["task_count"] = i + 1
     save_checkpoint(state)
     time.sleep(1)
+
+
