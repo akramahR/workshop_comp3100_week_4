@@ -8,6 +8,7 @@ print("Server is listening on port 12345...")
 while True:
     conn, addr = server_socket.accept()
     print(f"Connection established with {addr}")
-    conn.sendall(b"Hello from server!")
+    # create a process
+    conn.sendall(b"Hello from server!") # let a process handle this
     conn.close()
 

@@ -1,0 +1,7 @@
+flowchart LR
+    RiderApp --> APIGateway
+    DriverApp --> APIGateway
+    APIGateway --> RideMatchingService
+    APIGateway --> PaymentService
+    RideMatchingService --> Database
+    PaymentService --> Database    

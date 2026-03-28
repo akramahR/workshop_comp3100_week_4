@@ -1,0 +1,57 @@
+flowchart LR
+
+%% Clients
+RiderApp[Rider Mobile App]
+DriverApp[Driver Mobile App]
+
+%% Entry Layer
+LB[Load Balancer]
+API[API Gateway]
+Auth[Authentication Service]
+
+%% Core Services
+RideRequest[Ride Request Service]
+DriverLocation[Driver Location Service]
+RideMatch[Ride Matching Service]
+TripService[Trip Management Service]
+PaymentService[Payment Service]
+Notification[Notification Service]
+
+%% Infrastructure
+Cache[(Cache)]
+DB[(Main Database)]
+Queue[(Message Queue)]
+
+%% Client connections
+RiderApp --> LB
+DriverApp --> LB
+
+%% Entry processing
+LB --> API
+API --> Auth
+
+%% Service routing
+API --> RideRequest
+API --> DriverLocation
+API --> TripService
+API --> PaymentService
+
+%% Ride workflow
+RideRequest --> Queue
+Queue --> RideMatch
+DriverLocation --> RideMatch
+RideMatch --> TripService
+
+%% Notifications
+TripService --> Notification
+RideMatch --> Notification
+
+%% Payment
+TripService --> PaymentService
+
+%% Data storage
+RideRequest --> DB
+DriverLocation --> Cache
+RideMatch --> Cache
+TripService --> DB
+PaymentService --> DB
